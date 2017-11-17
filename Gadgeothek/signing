@@ -1,0 +1,11 @@
+#!/bin/bash
+
+${HOME}/gadgeothek.keystore -genkey -v \
+-keystore mischa-release-key.jks \
+-keyalg RSA \
+-keysize 2048 \
+-validity 10000 \
+-alias mischa-alias
+
+./gradlew assembleRelease
+zipalign -v -p 4 my-app-unsigned.apk my-app-unsigned-aligned.apk

@@ -9,10 +9,12 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import ch.hsr.mge.gadgeothek.R;
+import ch.hsr.mge.gadgeothek.contracts.RegisterContract;
+import ch.hsr.mge.gadgeothek.presenters.RegisterPresenter;
 import ch.hsr.mge.gadgeothek.service.Callback;
 import ch.hsr.mge.gadgeothek.service.LibraryService;
 
-public class RegisterActivity extends AbstractAuthenticationActivity {
+public class RegisterActivity extends AbstractAuthenticationActivity implements RegisterContract.View {
 
     private EditText emailView;
     private EditText passwordView;
@@ -21,10 +23,14 @@ public class RegisterActivity extends AbstractAuthenticationActivity {
     private View progressView;
     private View loginFormView;
 
+    private RegisterContract.UserActionsListener presenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        presenter = new RegisterPresenter(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -52,13 +58,6 @@ public class RegisterActivity extends AbstractAuthenticationActivity {
      * errors are presented and no actual login attempt is made.
      */
     public void attemptLogin() {
-
-        // Reset errors.
-        emailView.setError(null);
-        passwordView.setError(null);
-        nameView.setError(null);
-        matrikelNrView.setError(null);
-
         // Store values at the time of the login attempt.
         final String email = emailView.getText().toString();
         final String password = passwordView.getText().toString();
@@ -134,6 +133,14 @@ public class RegisterActivity extends AbstractAuthenticationActivity {
 
             showProgress(loginFormView, progressView, true);
         }
+    }
+
+    public void resetErrors(){
+        // Reset errors.
+        emailView.setError(null);
+        passwordView.setError(null);
+        nameView.setError(null);
+        matrikelNrView.setError(null);
     }
 
     @Override
